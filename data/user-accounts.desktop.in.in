@@ -1,0 +1,12 @@
+[Desktop Entry]
+_Name=Users
+_Comment=Add or remove users and change your password
+_Keywords=Login;Name;Fingerprint;Avatar;Logo;Face;Password;
+Exec=user-accounts
+Icon=system-users
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=System;Settings;X-XFCE-SettingsDialog;X-XFCE-SystemSettings;
+NotShowIn=GNOME;
+X-XfcePluggable=true

@@ -1,0 +1,13 @@
+User Accounts
+=============
+
+About -
+
+The user accounts app is a fork of GNOME control
+center's user-accounts panel.
+It can be used as a standalone application or as
+a plugin for the XFCE4 settings manager.
+
+Installation -
+
+Run `autoreconf -i`, then see the file 'INSTALL'
