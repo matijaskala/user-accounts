@@ -54,8 +54,6 @@ struct _UmPhotoDialog {
         guint num_cameras;
 #endif /* HAVE_CHEESE */
 
-	GHashTable *scripts_hash;
-
         ActUser *user;
 };
 
@@ -147,80 +145,6 @@ file_chooser_response (GtkDialog     *chooser,
 
         um_photo_dialog_crop (um, pixbuf);
         g_object_unref (pixbuf);
-}
-
-static GHashTable *
-read_scripts (void)
-{
-  GHashTable *scripts_hash;
-  GConfClient *client;
-  GSList *subdirs, *l;
-  char *subdir, *enable, *escape, *commandkey, *command, *mimetype;
-
-  client = gconf_client_get_default ();
-
-  if (gconf_client_get_bool (client,
-			     "/desktop/gnome/thumbnailers/disable_all",
-			     NULL))
-    {
-      g_object_unref (G_OBJECT (client));
-      return NULL;
-    }
-  
-  scripts_hash = g_hash_table_new_full (g_str_hash,
-					g_str_equal,
-					g_free, g_free);
-
-  
-  subdirs = gconf_client_all_dirs (client, "/desktop/gnome/thumbnailers", NULL);
-
-  for (l = subdirs; l != NULL; l = l->next)
-    {
-      subdir = l->data;
-
-      enable = g_strdup_printf ("%s/enable", subdir);
-      if (gconf_client_get_bool (client,
-				 enable,
-				 NULL))
-	{
-	  commandkey = g_strdup_printf ("%s/command", subdir);
-	  command = gconf_client_get_string (client, commandkey, NULL);
-	  g_free (commandkey);
-
-	  if (command != NULL) {
-	    mimetype = strrchr (subdir, '/');
-	    if (mimetype != NULL)
-	      {
-		mimetype++; /* skip past slash */
-		
-		/* Convert '@' to slash in mimetype */
-		escape = strchr (mimetype, '@');
-		if (escape != NULL)
-		  *escape = '/';
-
-		/* Convert any remaining '@' to '+' in mimetype */
-		while ((escape = strchr (mimetype, '@')) != NULL)
-                  *escape = '+';
-
-		g_hash_table_insert (scripts_hash,
-				     g_strdup (mimetype), command);
-	      }
-	    else
-	      {
-		g_free (command);
-	      }
-	  }
-	}
-      g_free (enable);
-      
-      g_free (subdir);
-    }
-  
-  g_slist_free(subdirs);
-
-  g_object_unref (G_OBJECT (client));
-  
-  return scripts_hash;
 }
 
 static char *
@@ -797,7 +721,7 @@ um_photo_dialog_select_file (UmPhotoDialog *um)
          * Preview also has to be generated on "selection-changed" signal to reflect
          * all changes (Bug 660877). */
         g_signal_connect_after (chooser, "selection-changed",
-                                G_CALLBACK (update_preview), um->scripts_hash);
+                                G_CALLBACK (update_preview), NULL);
 
         folder = g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
         if (folder)
@@ -1131,8 +1055,6 @@ um_photo_dialog_new (GtkWidget *button)
 
         um = g_new0 (UmPhotoDialog, 1);
 
-        um->scripts_hash = read_scripts ();
-
         /* Set up the popup */
         um->popup_button = button;
         setup_photo_popup (um);
@@ -1156,8 +1078,6 @@ um_photo_dialog_free (UmPhotoDialog *um)
 {
         gtk_widget_destroy (um->photo_popup);
 
-        if (um->scripts_hash)
-                g_hash_table_destroy (um->scripts_hash);
 #ifdef HAVE_CHEESE
         if (um->monitor)
                 g_object_unref (um->monitor);
