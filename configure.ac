@@ -50,7 +50,6 @@ PKG_CHECK_MODULES(USER_ACCOUNTS_PANEL, gtk+-2.0
                   gio-unix-2.0
                   gsettings-desktop-schemas >= $SCHEMAS_REQUIRED_VERSION
                   polkit-gobject-1 >= $POLKIT_REQUIRED_VERSION
-                  gconf-2.0
                   gdk-pixbuf-2.0 >= $GDKPIXBUF_REQUIRED_VERSION
                   pwquality >= $PWQUALITY_REQUIRED_VERSION
                   accountsservice >= $ACCOUNTSSERVICE_REQUIRED_VERSION)

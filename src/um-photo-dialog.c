@@ -29,7 +29,6 @@
 #define GDK_PIXBUF_ENABLE_BACKEND
 #include <gtk/gtk.h>
 #include <act/act.h>
-#include <gconf/gconf-client.h>
 
 #ifdef HAVE_CHEESE
 #include <cheese-avatar-chooser.h>
