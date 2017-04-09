@@ -1,4 +1,4 @@
-AC_INIT([user-accounts], [0.1],
+AC_INIT([user-accounts], [0.2],
         [https://github.com/matijaskala/user-accounts/issues])
 
 AC_CONFIG_SRCDIR([src])
