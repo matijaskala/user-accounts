@@ -31,7 +31,7 @@
 #include "pw-utils.h"
 
 #define PASSWORD_CHECK_TIMEOUT 600
-#define DOMAIN_DEFAULT_HINT _("Should match the web address of your account provider.")
+#define DOMAIN_DEFAULT_HINT _("Should match the web address of your login provider.")
 
 typedef enum {
         UM_LOCAL,
@@ -83,7 +83,7 @@ struct _UmAccountDialog {
         gint       local_name_timeout_id;
         GtkWidget *local_username_hint;
         gint       local_username_timeout_id;
-        GtkWidget *local_account_type;
+        GtkWidget *account_type_standard;
         ActUserPasswordMode local_password_mode;
         GtkWidget *local_password_radio;
         GtkWidget *local_password;
@@ -249,16 +249,12 @@ local_create_user (UmAccountDialog *self)
         const gchar *username;
         const gchar *name;
         gint account_type;
-        GtkTreeModel *model;
-        GtkTreeIter iter;
 
         begin_action (self);
 
         name = gtk_entry_get_text (GTK_ENTRY (self->local_name));
         username = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (self->local_username));
-        model = gtk_combo_box_get_model (GTK_COMBO_BOX (self->local_account_type));
-        gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self->local_account_type), &iter);
-        gtk_tree_model_get (model, &iter, 1, &account_type, -1);
+        account_type = (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->account_type_standard)) ? ACT_USER_ACCOUNT_TYPE_STANDARD : ACT_USER_ACCOUNT_TYPE_ADMINISTRATOR);
 
         g_debug ("Creating local user: %s", username);
 
@@ -572,8 +568,8 @@ local_init (UmAccountDialog *self,
         widget = (GtkWidget *) gtk_builder_get_object (builder, "local-username-hint");
         self->local_username_hint = widget;
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-account-type");
-        self->local_account_type = widget;
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "account_type_standard");
+        self->account_type_standard = widget;
 
         widget = (GtkWidget *) gtk_builder_get_object (builder, "local-password-now-radio");
         g_signal_connect (widget, "toggled", G_CALLBACK (on_password_radio_changed), self);
@@ -620,7 +616,7 @@ local_prepare (UmAccountDialog *self)
         gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (self->local_username))), "");
         model = gtk_combo_box_get_model (GTK_COMBO_BOX (self->local_username));
         gtk_list_store_clear (GTK_LIST_STORE (model));
-        gtk_combo_box_set_active (GTK_COMBO_BOX (self->local_account_type), 0);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->account_type_standard), TRUE);
 }
 
 static gboolean

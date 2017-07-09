@@ -35,10 +35,6 @@
 #include <act/act.h>
 #include <cairo-gobject.h>
 
-#ifdef HAVE_CHEESE
-#include <gst/gst.h>
-#endif /* HAVE_CHEESE */
-
 #include "um-editable-button.h"
 #include "um-editable-combo.h"
 #include "um-user-image.h"
@@ -58,14 +54,6 @@ G_DEFINE_TYPE (CcUserPanel, cc_user_panel, GTK_TYPE_WINDOW)
 
 #define UM_USER_PANEL_PRIVATE(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), UM_TYPE_USER_PANEL, CcUserPanelPrivate))
-
-typedef enum {
-        DISPLAY_MANAGER_UNKNOWN,
-        DISPLAY_MANAGER_LXDM,
-        DISPLAY_MANAGER_LIGHTDM,
-        DISPLAY_MANAGER_SDDM,
-        DISPLAY_MANAGER_GDM,
-} DisplayManager;
 
 struct _CcUserPanelPrivate {
         ActUserManager *um;
@@ -888,15 +876,16 @@ show_user (ActUser *user, CcUserPanelPrivate *d)
         um_photo_dialog_set_user (d->photo_dialog, user);
 
         widget = get_widget (d, "full-name-entry");
-        gtk_button_set_label (GTK_BUTTON (widget), act_user_get_real_name (user));
-        gtk_widget_set_tooltip_text (widget, act_user_get_user_name (user));
-        widget = get_widget (d, "full-name-value-label");
-        gtk_label_set_text (GTK_LABEL (widget), act_user_get_real_name (user));
+        gtk_entry_set_text (GTK_ENTRY (widget), act_user_get_real_name (user));
         gtk_widget_set_tooltip_text (widget, act_user_get_user_name (user));
 
-        widget = get_widget (d, "account-type-combo");
-        gtk_combo_box_set_active (GTK_COMBO_BOX (widget), act_user_get_account_type (user));
-        gtk_label_set_text (GTK_LABEL (get_widget (d, "account-type-value-label")), gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget)));
+        widget = get_widget (d, act_user_get_account_type (user) ? "account-type-admin" : "account-type-standard");
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+        /* Do not show the "Account Type" option when there's a single user account. */
+        show = (d->other_accounts != 0);
+        gtk_widget_set_visible (get_widget (d, "account-type-label"), show);
+        gtk_widget_set_visible (get_widget (d, "account-type-box"), show);
 
         enable = act_user_is_local_account (user);
         widget = get_widget (d, "account-password-button");
@@ -939,7 +928,7 @@ show_user (ActUser *user, CcUserPanelPrivate *d)
                act_user_get_account_type (current) == ACT_USER_ACCOUNT_TYPE_ADMINISTRATOR;
         if (show) {
                 text = get_login_time_text (user);
-                gtk_label_set_text (GTK_LABEL (widget), text);
+                gtk_label_set_label (GTK_LABEL (widget), text);
                 g_free (text);
         }
         gtk_widget_set_visible (widget, show);
@@ -967,8 +956,7 @@ selected_user_changed (GtkTreeSelection *selection, CcUserPanelPrivate *d)
 }
 
 static void
-change_name_done (GtkDialog          *dialog,
-                  gint                response,
+change_name_done (GtkWidget          *entry,
                   CcUserPanelPrivate *d)
 {
         const gchar *text;
@@ -976,45 +964,35 @@ change_name_done (GtkDialog          *dialog,
 
         user = get_selected_user (d);
 
-        if (response == GTK_RESPONSE_OK) {
-                text = gtk_entry_get_text (GTK_ENTRY (d->name_entry));
-                if (g_strcmp0 (text, act_user_get_real_name (user)) != 0 &&
-                    is_valid_name (text)) {
-                        act_user_set_real_name (user, text);
-                }
+        text = gtk_entry_get_text (GTK_ENTRY (entry));
+        if (g_strcmp0 (text, act_user_get_real_name (user)) != 0 &&
+            is_valid_name (text)) {
+                act_user_set_real_name (user, text);
         }
 
         g_object_unref (user);
-        gtk_widget_hide (GTK_WIDGET (dialog));
 }
 
 static void
-change_name (GtkWidget          *button,
-             CcUserPanelPrivate *d)
+change_name_focus_out (GtkWidget          *entry,
+                       GdkEvent           *event,
+                       CcUserPanelPrivate *d)
 {
-        gtk_entry_set_text (GTK_ENTRY (d->name_entry), gtk_button_get_label (GTK_BUTTON (button)));
-        gtk_window_set_transient_for (GTK_WINDOW (d->name_dialog),
-                                  GTK_WINDOW (gtk_widget_get_toplevel (d->main_box)));
-        gtk_window_present (GTK_WINDOW (d->name_dialog));
-        gtk_button_set_label (GTK_BUTTON (button), gtk_entry_get_text (GTK_ENTRY (d->name_entry)));
+        change_name_done (entry, d);
 }
 
 static void
-account_type_changed (UmEditableCombo    *combo,
+account_type_changed (GtkToggleButton    *button,
                       CcUserPanelPrivate *d)
 {
         ActUser *user;
-        GtkTreeModel *model;
-        GtkTreeIter iter;
         gint account_type;
         gboolean self_selected;
 
         user = get_selected_user (d);
         self_selected = act_user_get_uid (user) == geteuid ();
 
-        model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
-        gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter);
-        gtk_tree_model_get (model, &iter, 1, &account_type, -1);
+        account_type = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ?  ACT_USER_ACCOUNT_TYPE_STANDARD : ACT_USER_ACCOUNT_TYPE_ADMINISTRATOR;
 
         if (account_type != act_user_get_account_type (user))
                 act_user_set_account_type (user, account_type);
@@ -1242,32 +1220,28 @@ on_permission_changed (GPermission *permission,
         }
 
         if (!act_user_is_local_account (user)) {
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-combo")), FALSE);
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-value-label")), TRUE);
-                remove_unlock_tooltip (get_widget (d, "account-type-value-label"));
+                gtk_widget_set_sensitive (get_widget (d, "account-type-box"), FALSE);
+                remove_unlock_tooltip (get_widget (d, "account-type-box"));
                 gtk_widget_set_sensitive (GTK_WIDGET (get_widget (d, "autologin-switch")), FALSE);
                 remove_unlock_tooltip (get_widget (d, "autologin-switch"));
 
         } else if (is_authorized) {
                 if (would_demote_only_admin (user)) {
-                        gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-combo")), FALSE);
-                        gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-value-label")), TRUE);
+                        gtk_widget_set_sensitive (get_widget (d, "account-type-box"), FALSE);
                 } else {
-                        gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-combo")), TRUE);
-                        gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-value-label")), FALSE);
+                        gtk_widget_set_sensitive (get_widget (d, "account-type-box"), TRUE);
                 }
-                remove_unlock_tooltip (get_widget (d, "account-type-value-label"));
+                remove_unlock_tooltip (get_widget (d, "account-type-box"));
 
                 gtk_widget_set_sensitive (GTK_WIDGET (get_widget (d, "autologin-switch")), get_autologin_possible (user));
                 remove_unlock_tooltip (get_widget (d, "autologin-switch"));
         }
         else {
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-combo")), FALSE);
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-type-value-label")), TRUE);
+                gtk_widget_set_sensitive (get_widget (d, "account-type-box"), FALSE);
                 if (would_demote_only_admin (user)) {
-                        remove_unlock_tooltip (get_widget (d, "account-type-value-label"));
+                        remove_unlock_tooltip (get_widget (d, "account-type-box"));
                 } else {
-                        add_unlock_tooltip (get_widget (d, "account-type-value-label"));
+                        add_unlock_tooltip (get_widget (d, "account-type-box"));
                 }
                 gtk_widget_set_sensitive (GTK_WIDGET (get_widget (d, "autologin-switch")), FALSE);
                 add_unlock_tooltip (get_widget (d, "autologin-switch"));
@@ -1276,19 +1250,15 @@ on_permission_changed (GPermission *permission,
         /* The full name entry: insensitive if remote or not authorized and not self */
         widget = get_widget (d, "full-name-entry");
         if (!act_user_is_local_account (user)) {
-                gtk_widget_set_visible (GTK_WIDGET (widget), FALSE); /* ENTRY */
-                widget = get_widget (d, "full-name-value-label");
-                gtk_widget_set_visible (widget, TRUE);
+                gtk_widget_set_sensitive (widget, FALSE);
                 remove_unlock_tooltip (widget);
+
         } else if (is_authorized || self_selected) {
-                gtk_widget_set_visible (GTK_WIDGET (widget), TRUE); /* ENTRY */
-                widget = get_widget (d, "full-name-value-label");
-                gtk_widget_set_visible (GTK_WIDGET (widget), FALSE);
+                gtk_widget_set_sensitive (widget, TRUE);
                 remove_unlock_tooltip (widget);
+
         } else {
-                gtk_widget_set_visible (widget, FALSE); /* ENTRY */
-                widget = get_widget (d, "full-name-value-label");
-                gtk_widget_set_visible (widget, TRUE);
+                gtk_widget_set_sensitive (widget, FALSE);
                 add_unlock_tooltip (widget);
         }
 
@@ -1296,22 +1266,22 @@ on_permission_changed (GPermission *permission,
                 gtk_widget_show (get_widget (d, "user-icon-button"));
                 gtk_widget_hide (get_widget (d, "user-icon-image"));
 
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-password-button")), TRUE);
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-password-label")), FALSE);
+                gtk_widget_set_visible (get_widget (d, "account-password-button"), TRUE);
+                gtk_widget_set_visible (get_widget (d, "account-password-label"), FALSE);
                 remove_unlock_tooltip (get_widget (d, "account-password-label"));
 
-                gtk_widget_set_sensitive (GTK_WIDGET (get_widget (d, "account-fingerprint-button")), TRUE);
+                gtk_widget_set_sensitive (get_widget (d, "account-fingerprint-button"), TRUE);
                 remove_unlock_tooltip (get_widget (d, "account-fingerprint-button"));
         }
         else {
                 gtk_widget_hide (get_widget (d, "user-icon-button"));
                 gtk_widget_show (get_widget (d, "user-icon-image"));
 
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-password-button")), FALSE);
-                gtk_widget_set_visible (GTK_WIDGET (get_widget (d, "account-password-label")), TRUE);
+                gtk_widget_set_visible (get_widget (d, "account-password-button"), FALSE);
+                gtk_widget_set_visible (get_widget (d, "account-password-label"), TRUE);
                 add_unlock_tooltip (get_widget (d, "account-password-label"));
 
-                gtk_widget_set_sensitive (GTK_WIDGET (get_widget (d, "account-fingerprint-button")), FALSE);
+                gtk_widget_set_sensitive (get_widget (d, "account-fingerprint-button"), FALSE);
                 add_unlock_tooltip (get_widget (d, "account-fingerprint-button"));
         }
 
@@ -1551,10 +1521,11 @@ setup_main_window (CcUserPanel *self)
         add_unlock_tooltip (button);
 
         button = get_widget (d, "full-name-entry");
-        g_signal_connect (button, "clicked", G_CALLBACK (change_name), d);
+        g_signal_connect (button, "activate", G_CALLBACK (change_name_done), d);
+        g_signal_connect (button, "focus-out-event", G_CALLBACK (change_name_focus_out), d);
 
-        button = get_widget (d, "account-type-combo");
-        g_signal_connect (button, "changed", G_CALLBACK (account_type_changed), d);
+        button = get_widget (d, "account-type-standard");
+        g_signal_connect (button, "toggled", G_CALLBACK (account_type_changed), d);
 
         button = get_widget (d, "account-password-button");
         g_signal_connect (button, "clicked", G_CALLBACK (change_password), d);

@@ -7,24 +7,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="account-type-model">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-      <!-- column-name gint -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="Account type">Standard</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="Account type">Administrator</col>
-        <col id="1">1</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkVBox" id="plug-child">
     <property name="visible">True</property>
     <child>
@@ -131,18 +113,25 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="hbox6">
+                          <object class="GtkHBox" id="account-type-box">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="sensitive">False</property>
                             <child>
-                              <object class="GtkComboBoxText" id="account-type-combo">
+                              <object class="GtkRadioButton" id="account-type-standard">
                                 <property name="visible">True</property>
-                                <property name="model">account-type-model</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">Standard</property>
+                                <property name="draw_indicator">True</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="account-type-value-label">
-                                <property name="visible">False</property>
-                                <property name="xalign">0</property>
+                              <object class="GtkRadioButton" id="account-type-admin">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">Administrator</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">account-type-standard</property>
                               </object>
                             </child>
                           </object>
@@ -157,7 +146,7 @@
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Account _Type</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">account-type-combo</property>
+                            <property name="mnemonic_widget">account-type-box</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -169,23 +158,12 @@
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkHBox" id="hbox7">
+                              <object class="GtkEntry" id="full-name-entry">
                                 <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkButton" id="full-name-entry">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="full-name-value-label">
-                                    <property name="visible">False</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                </child>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="fill">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -462,12 +440,17 @@
       <widget name="account-fingerprint-button"/>
       <widget name="account-password-button"/>
       <widget name="account-password-label"/>
-      <widget name="account-type-combo"/>
-      <widget name="account-type-value-label"/>
+      <widget name="account-type-box"/>
       <widget name="full-name-entry"/>
-      <widget name="full-name-value-label"/>
       <widget name="autologin-box"/>
       <widget name="last-login-grid"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="account-type-sizegroup">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="account-type-standard"/>
+      <widget name="account-type-admin"/>
     </widgets>
   </object>
 </interface>
