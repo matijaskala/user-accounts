@@ -6802,10 +6802,10 @@ msgstr "Prepričajte se, da je paket AccoutnService nameščen in omogočen."
 #: ../panels/user-accounts/um-user-panel.c:1315
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Za spreminjanje,\n"
-"kliknite na gumb odkleni"
+"kliknite na ikono *"
 
 #: ../panels/user-accounts/um-user-panel.c:1353
 msgid "Create a user account"
@@ -6815,10 +6815,10 @@ msgstr "Ustvari uporabniški račun"
 #: ../panels/user-accounts/um-user-panel.c:1676
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Za ustvarjanje uporabniškega računa,\n"
-"kliknite na gumb odkleni"
+"kliknite na ikono *"
 
 #: ../panels/user-accounts/um-user-panel.c:1374
 msgid "Delete the selected user account"
@@ -6828,10 +6828,10 @@ msgstr "Izbriši izbran uporabniški račun"
 #: ../panels/user-accounts/um-user-panel.c:1681
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Za izbris izbranega uporabniškega računa,\n"
-"kliknite na gumb odkleni"
+"kliknite na ikono *"
 
 #: ../panels/user-accounts/um-user-panel.c:1590
 msgid "My Account"
@@ -8641,11 +8641,8 @@ msgstr "Prekliči iskanje"
 #~ msgid "Locations..."
 #~ msgstr "Mesta ..."
 
-msgid "Unlock"
-msgstr "Odkleni"
-
-msgid "Lock"
-msgstr "Zakleni"
+#~ msgid "Lock"
+#~ msgstr "Zakleni"
 
 #~ msgid "Enable debugging code"
 #~ msgstr "Omogoči razhroščevanje kode"

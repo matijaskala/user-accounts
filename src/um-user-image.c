@@ -37,11 +37,10 @@ render_image (UmUserImage *image)
         cairo_surface_t *surface;
         gint scale;
 
-        scale = 1;//gtk_widget_get_scale_factor (GTK_WIDGET (image));
-        GdkPixbuf *pixbuf = render_user_icon (image->priv->user, UM_ICON_STYLE_NONE, 48, scale);
-        gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-        //gtk_image_set_from_surface (GTK_IMAGE (image), surface);
-        //cairo_surface_destroy (surface);
+        scale = gtk_widget_get_scale_factor (GTK_WIDGET (image));
+        surface = render_user_icon (image->priv->user, UM_ICON_STYLE_NONE, 48, scale);
+        gtk_image_set_from_surface (GTK_IMAGE (image), surface);
+        cairo_surface_destroy (surface);
 }
 
 void

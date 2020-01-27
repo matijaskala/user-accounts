@@ -6659,7 +6659,7 @@ msgstr "कृपया AccountService प्रतिष्ठापीत न�
 #: ../panels/user-accounts/um-user-panel.c:1114
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "बदल करण्यासाठी,\n"
 "पहिले * चिन्ह क्लिक करा"
@@ -6672,7 +6672,7 @@ msgstr "वापरकर्ता खाते निर्माण करा
 #: ../panels/user-accounts/um-user-panel.c:1475
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "वापरकर्ता खाते निर्माण करण्यासाठी,\n"
 "पहिले * क्लिक करा"
@@ -6685,7 +6685,7 @@ msgstr "निवडलेल्या वापरकर्त्याचे �
 #: ../panels/user-accounts/um-user-panel.c:1480
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "निवडलेले वापरकर्ता खाते नष्ट करण्यासाठी,\n"
 "पहिले * चिन्हावर क्लिक करा"

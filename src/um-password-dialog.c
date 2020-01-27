@@ -82,7 +82,7 @@ update_password_strength (UmPasswordDialog *um)
         pw_strength (password, old_password, username,
                      &hint, &long_hint, &strength_level);
 
-        gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (um->strength_indicator), strength_level/4.0);
+        gtk_level_bar_set_value (GTK_LEVEL_BAR (um->strength_indicator), strength_level);
         gtk_label_set_label (GTK_LABEL (um->password_hint), long_hint);
 
         if (strength_level > 0) {

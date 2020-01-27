@@ -4022,7 +4022,7 @@ msgstr "Baweriya xwe pê bîne ku pêvek rast hatiye sazkirin."
 #: ../panels/user-accounts/um-user-panel.c:887
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:925
@@ -4033,7 +4033,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1225
 msgid ""
 "To create a user,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:945
@@ -4044,7 +4044,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1230
 msgid ""
 "To delete the selected user,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1134

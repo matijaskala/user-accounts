@@ -6914,7 +6914,7 @@ msgstr "Уверете се дали програмата „AcountService“ е
 #: ../panels/user-accounts/um-user-panel.c:1334
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да правите промени,\n"
 "натиснете иконата „*“"
@@ -6927,7 +6927,7 @@ msgstr "Създаване на потребителска регистраци�
 #: ../panels/user-accounts/um-user-panel.c:1677
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да създадете потребителска регистрация,\n"
 "първо натиснете иконата „*“"
@@ -6940,7 +6940,7 @@ msgstr "Изтриване на избраната потребителска р
 #: ../panels/user-accounts/um-user-panel.c:1682
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да изтриете избраната потребителска регистрация,\n"
 "първо натиснете иконата „*“"

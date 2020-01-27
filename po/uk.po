@@ -6917,7 +6917,7 @@ msgstr "Будь ласка, переконайтесь, що AccountService в�
 #: ../panels/user-accounts/um-user-panel.c:1334
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Щоб унести зміни,\n"
 "натисніть спочатку на піктограму *"
@@ -6930,7 +6930,7 @@ msgstr "Створити обліковий запис користувача"
 #: ../panels/user-accounts/um-user-panel.c:1677
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Щоб створити обліковий запис користувача,\n"
 "натисніть спочатку на піктограму *"
@@ -6943,7 +6943,7 @@ msgstr "Вилучити вибраний обліковий запис кори
 #: ../panels/user-accounts/um-user-panel.c:1682
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Щоб вилучити вибраний обліковий запис користувача,\n"
 "натисніть спочатку на піктограму *"

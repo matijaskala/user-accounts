@@ -4986,7 +4986,7 @@ msgstr "សូម​ប្រាកដ​ថា AccountService ត្រូវ�
 #: ../panels/user-accounts/um-user-panel.c:911
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "ដើម្បី​ធ្វើការ​ផ្លាស់ប្ដូរ\n"
 "ចុចរូប​តំណាង * ជាមុន​សិន"
@@ -4999,7 +4999,7 @@ msgstr "បង្កើត​គណនី​អ្នកប្រើ"
 #: ../panels/user-accounts/um-user-panel.c:1271
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "ដើម្បី​បង្កើត​គណនី​អ្នកប្រើ\n"
 "ចុច​រូប​តំណាង * ជាមុន"
@@ -5012,7 +5012,7 @@ msgstr "លុប​គណនី​អ្នកប្រើ​ដែល​បា
 #: ../panels/user-accounts/um-user-panel.c:1276
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "ដើម្បី​លុប​គណនី​អ្នកប្រើ​ដែល​បាន​ជ្រើស\n"
 "ចុច​រូប​តំណាង * ជាមុន"

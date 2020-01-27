@@ -6405,7 +6405,7 @@ msgstr "AccountService توغرا ئورنىتىلىپ قوزغىتىلغانل�
 #: ../panels/user-accounts/um-user-panel.c:984
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr "ئۆزگەرتىشتە،\n"
 "ئالدى بىلەن * سىنبەلگىنى چېكىڭ"
 
@@ -6417,7 +6417,7 @@ msgstr "بىر ئىشلەتكۈچى ھېساباتى قۇرىدۇ"
 #: ../panels/user-accounts/um-user-panel.c:1319
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr "ئىشلەتكۈچى ھېساباتى قۇرۇش ئۈچۈن،\n"
 "ئالدى بىلەن * سىنبەلگىسىنى چېكىڭ"
 
@@ -6429,7 +6429,7 @@ msgstr "تاللانغان ئىشلەتكۈچى ھېساباتىنى ئۆچۈر�
 #: ../panels/user-accounts/um-user-panel.c:1324
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr "تاللانغان ئىشلەتكۈچى ھېساباتىنى ئۆچۈرۈش ئۈچۈن،\n"
 "ئالدى بىلەن * سىنبەلگىسىنى چېكىڭ"
 

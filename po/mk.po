@@ -4485,7 +4485,7 @@ msgstr "Проверете дали AccountService е инсталиран и о
 #: ../panels/user-accounts/um-user-panel.c:888
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да направите промени,\n"
 "кликнете на иконата *"
@@ -4498,7 +4498,7 @@ msgstr "Креирај нова сметка"
 #: ../panels/user-accounts/um-user-panel.c:1226
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да креирате нова сметка,\n"
 "кликнете на иконата *"
@@ -4511,7 +4511,7 @@ msgstr "Избриши ја избраната корисничка сметка
 #: ../panels/user-accounts/um-user-panel.c:1231
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "За да ја избришете избраната корисничка сметка,\n"
 "стиснете на иконата *"

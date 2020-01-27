@@ -6821,10 +6821,10 @@ msgstr "Please make sure that the AccountService is installed and enabled."
 #: ../panels/user-accounts/um-user-panel.c:1334
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 
 #: ../panels/user-accounts/um-user-panel.c:1374
 msgid "Create a user account"
@@ -6834,10 +6834,10 @@ msgstr "Create a user account"
 #: ../panels/user-accounts/um-user-panel.c:1677
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 
 #: ../panels/user-accounts/um-user-panel.c:1395
 msgid "Delete the selected user account"
@@ -6847,10 +6847,10 @@ msgstr "Delete the selected user account"
 #: ../panels/user-accounts/um-user-panel.c:1682
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 
 #: ../panels/user-accounts/um-user-panel.c:1591
 msgid "My Account"

@@ -7307,7 +7307,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1127
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1165
@@ -7318,7 +7318,7 @@ msgstr "Cipta satu akaun pengguna"
 #: ../panels/user-accounts/um-user-panel.c:1488
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1186
@@ -7329,7 +7329,7 @@ msgstr "Padam akaun pengguna dipilih"
 #: ../panels/user-accounts/um-user-panel.c:1493
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1402

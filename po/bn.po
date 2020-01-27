@@ -3274,7 +3274,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:866
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "পরিবর্তন করতে,\n"
 "*আইকনটি প্রথমে ক্লিক করুন"
@@ -3287,7 +3287,7 @@ msgstr "ব্যবহারকারী তৈরি"
 #: ../panels/user-accounts/um-user-panel.c:1214
 msgid ""
 "To create a user,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "ব্যবহারকারী তৈরি করতে,\n"
 "*আইকনটি প্রথমে ক্লিক করুন"
@@ -3300,7 +3300,7 @@ msgstr "নির্বাচিত ব্যবহারকারী মুছ�
 #: ../panels/user-accounts/um-user-panel.c:1219
 msgid ""
 "To delete the selected user,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr "নির্বাচিত ব্যবহারকারী মুছে ফেলতে,*আইকনটি প্রথমে ক্লিক করুন"
 
 #: ../panels/user-accounts/um-user-panel.c:1114

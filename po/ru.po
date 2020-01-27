@@ -6900,7 +6900,7 @@ msgstr "Убедитесь, что AccountService установлен и вкл
 #: ../panels/user-accounts/um-user-panel.c:1334
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Чтобы изменить,\n"
 "сначала нажмите на значок *"
@@ -6913,7 +6913,7 @@ msgstr "Создать учётную запись пользователя"
 #: ../panels/user-accounts/um-user-panel.c:1677
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Чтобы создать учётную запись пользователя,\n"
 "сначала нажмите на значок *"
@@ -6926,7 +6926,7 @@ msgstr "Удалить выбранную учётную запись польз
 #: ../panels/user-accounts/um-user-panel.c:1682
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Чтобы удалить выбранную учётную запись пользователя,\n"
 "сначала нажмите на значок *"

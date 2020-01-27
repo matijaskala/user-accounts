@@ -45,12 +45,12 @@ render_user_image (UmCellRendererUserImage *cell_renderer)
         gint scale;
 
         if (cell_renderer->priv->user != NULL) {
-                scale = 1;//gtk_widget_get_scale_factor (cell_renderer->priv->parent);
-                GdkPixbuf *pixbuf = render_user_icon (cell_renderer->priv->user, UM_ICON_STYLE_FRAME | UM_ICON_STYLE_STATUS, 48, scale);
-                g_object_set (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "pixbuf", pixbuf, NULL);
-                g_object_unref (pixbuf);
+                scale = gtk_widget_get_scale_factor (cell_renderer->priv->parent);
+                surface = render_user_icon (cell_renderer->priv->user, UM_ICON_STYLE_FRAME | UM_ICON_STYLE_STATUS, 48, scale);
+                g_object_set (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "surface", surface, NULL);
+                cairo_surface_destroy (surface);
         } else {
-                g_object_set (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "pixbuf", NULL, NULL);
+                g_object_set (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "surface", NULL, NULL);
         }
 }
 

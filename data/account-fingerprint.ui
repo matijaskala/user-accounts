@@ -184,6 +184,8 @@
         <child>
           <object class="GtkHBox" id="enroll_hbox">
             <property name="visible">True</property>
+            <property name="margin-top">24</property>
+            <property name="margin-bottom">24</property>
             <child>
               <object class="GtkImage" id="image1">
                 <property name="visible">True</property>

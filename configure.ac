@@ -1,4 +1,4 @@
-AC_INIT([user-accounts], [0.3],
+AC_INIT([user-accounts], [0.4],
         [https://github.com/matijaskala/user-accounts/issues])
 
 AC_CONFIG_SRCDIR([src])
@@ -43,7 +43,7 @@ SCHEMAS_REQUIRED_VERSION=3.15.4
 ACCOUNTSSERVICE_REQUIRED_VERSION=0.6.39
 PWQUALITY_REQUIRED_VERSION=1.2.2
 
-PKG_CHECK_MODULES(USER_ACCOUNTS_PANEL, gtk+-2.0
+PKG_CHECK_MODULES(USER_ACCOUNTS_PANEL, gtk+-3.0
                   glib-2.0 >= $GLIB_REQUIRED_VERSION
                   gthread-2.0
                   gio-2.0
@@ -68,8 +68,7 @@ AC_ARG_WITH([cheese],
             with_cheese=auto)
 
 if test x"$with_cheese" != x"no" ; then
-   # No webcam support at this time
-   PKG_CHECK_MODULES(CHEESE, gstreamer-1.0 cheese >= 3.5.91, [have_cheese=no], [have_cheese=no])
+   PKG_CHECK_MODULES(CHEESE, cheese-gtk >= 3.5.91 cheese, [have_cheese=yes], [have_cheese=no])
    if test x${have_cheese} = xyes; then
      AC_DEFINE(HAVE_CHEESE, 1, [Define to 1 to enable cheese webcam support])
    fi

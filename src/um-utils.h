@@ -59,7 +59,7 @@ void     rounded_rectangle                (cairo_t     *cr,
                                            gdouble      width,
                                            gdouble      height);
 
-void     down_arrow                       (GtkStyle        *style,
+void     down_arrow                       (GtkStyleContext *context,
                                            cairo_t         *cr,
                                            gint             x,
                                            gint             y,
@@ -75,7 +75,7 @@ void     generate_username_choices        (const gchar     *name,
 
 gchar *  get_smart_date                   (GDateTime *date);
 
-GdkPixbuf *render_user_icon               (ActUser         *user,
+cairo_surface_t *render_user_icon         (ActUser         *user,
                                            UmIconStyle      style,
                                            gint             icon_size,
                                            gint             scale);

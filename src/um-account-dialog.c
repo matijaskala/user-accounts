@@ -79,6 +79,7 @@ struct _UmAccountDialog {
 
         /* Local user account widgets */
         GtkWidget *local_username;
+        GtkWidget *local_username_entry;
         GtkWidget *local_name;
         gint       local_name_timeout_id;
         GtkWidget *local_username_hint;
@@ -283,7 +284,7 @@ update_password_strength (UmAccountDialog *self)
         pw_strength (password, NULL, username, &hint, &long_hint, &strength_level);
 
         gtk_label_set_label (GTK_LABEL (self->local_hint), long_hint);
-        gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (self->local_strength_indicator), strength_level/4.0);
+        gtk_level_bar_set_value (GTK_LEVEL_BAR (self->local_strength_indicator), strength_level);
 
         if (strength_level > 0) {
                 set_entry_validation_checkmark (GTK_ENTRY (self->local_password));
@@ -387,7 +388,7 @@ on_username_changed (GtkComboBoxText *combo,
 static gboolean
 local_name_timeout (UmAccountDialog *self)
 {
-        self->local_username_timeout_id = 0;
+        self->local_name_timeout_id = 0;
 
         dialog_validate (self);
 
@@ -545,63 +546,36 @@ on_password_radio_changed (GtkRadioButton *radio,
 }
 
 static void
-local_init (UmAccountDialog *self,
-            GtkBuilder *builder)
+local_init (UmAccountDialog *self)
 {
-        GtkWidget *widget;
-
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-username");
-        g_signal_connect (widget, "changed",
+        g_signal_connect (self->local_username, "changed",
                           G_CALLBACK (on_username_changed), self);
-        g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (on_username_focus_out), self);
-        self->local_username = widget;
+        g_signal_connect_after (self->local_username, "focus-out-event", G_CALLBACK (on_username_focus_out), self);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-username-entry");
-        g_signal_connect_swapped (widget, "activate", G_CALLBACK (dialog_validate), self);
+        g_signal_connect_swapped (self->local_username_entry, "activate", G_CALLBACK (dialog_validate), self);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-name");
-        g_signal_connect (widget, "changed", G_CALLBACK (on_name_changed), self);
-        g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (on_name_focus_out), self);
-        g_signal_connect_swapped (widget, "activate", G_CALLBACK (dialog_validate), self);
-        self->local_name = widget;
+        g_signal_connect (self->local_name, "changed", G_CALLBACK (on_name_changed), self);
+        g_signal_connect_after (self->local_name, "focus-out-event", G_CALLBACK (on_name_focus_out), self);
+        g_signal_connect_swapped (self->local_name, "activate", G_CALLBACK (dialog_validate), self);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-username-hint");
-        self->local_username_hint = widget;
-
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "account_type_standard");
-        self->account_type_standard = widget;
-
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-password-now-radio");
-        g_signal_connect (widget, "toggled", G_CALLBACK (on_password_radio_changed), self);
-        self->local_password_radio = widget;
+        g_signal_connect (self->local_password_radio, "toggled", G_CALLBACK (on_password_radio_changed), self);
 
         self->local_password_mode = ACT_USER_PASSWORD_MODE_SET_AT_LOGIN;
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-password");
-        gtk_widget_set_sensitive (widget, FALSE);
-        g_signal_connect (widget, "notify::text", G_CALLBACK (on_password_changed), self);
-        g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (on_password_focus_out), self);
-        g_signal_connect_swapped (widget, "activate", G_CALLBACK (dialog_validate), self);
-        self->local_password = widget;
-        g_signal_connect (widget, "icon-press", G_CALLBACK (on_generate), self);
+        gtk_widget_set_sensitive (self->local_password, FALSE);
+        g_signal_connect (self->local_password, "notify::text", G_CALLBACK (on_password_changed), self);
+        g_signal_connect_after (self->local_password, "focus-out-event", G_CALLBACK (on_password_focus_out), self);
+        g_signal_connect_swapped (self->local_password, "activate", G_CALLBACK (dialog_validate), self);
+        g_signal_connect (self->local_password, "icon-press", G_CALLBACK (on_generate), self);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-verify");
-        gtk_widget_set_sensitive (widget, FALSE);
-        g_signal_connect (widget, "notify::text", G_CALLBACK (on_password_changed), self);
-        g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (on_password_focus_out), self);
-        g_signal_connect_swapped (widget, "activate", G_CALLBACK (dialog_validate), self);
-        self->local_verify = widget;
+        gtk_widget_set_sensitive (self->local_verify, FALSE);
+        g_signal_connect (self->local_verify, "notify::text", G_CALLBACK (on_password_changed), self);
+        g_signal_connect_after (self->local_verify, "focus-out-event", G_CALLBACK (on_password_focus_out), self);
+        g_signal_connect_swapped (self->local_verify, "activate", G_CALLBACK (dialog_validate), self);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-strength-indicator");
-        gtk_widget_set_sensitive (widget, FALSE);
-        self->local_strength_indicator = widget;
+        gtk_widget_set_sensitive (self->local_strength_indicator, FALSE);
 
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-hint");
-        gtk_widget_set_sensitive (widget, FALSE);
-        self->local_hint = widget;
-
-        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-verify-hint");
-        self->local_verify_hint = widget;
+        gtk_widget_set_sensitive (self->local_hint, FALSE);
 
         dialog_validate (self);
         update_password_strength (self);
@@ -937,8 +911,7 @@ on_join_login (GObject *source,
 }
 
 static void
-join_init (UmAccountDialog *self,
-           GtkBuilder *builder)
+join_init (UmAccountDialog *self, GtkBuilder *builder)
 {
         self->join_dialog = GTK_DIALOG (gtk_builder_get_object (builder, "join-dialog"));
         self->join_domain = GTK_LABEL (gtk_builder_get_object (builder, "join-domain"));
@@ -1407,21 +1380,7 @@ mode_change (UmAccountDialog *self,
                 mode = available ? UM_ENTERPRISE : UM_OFFLINE;
         }
 
-        gtk_widget_hide (self->local_area);
-        gtk_widget_hide (self->enterprise_area);
-        gtk_widget_hide (self->enterprise_offline_area);
-        switch (mode) {
-                case UM_LOCAL:
-                        gtk_widget_show (self->local_area);
-                        break;
-                case UM_ENTERPRISE:
-                        gtk_widget_show (self->enterprise_area);
-                        break;
-                case UM_OFFLINE:
-                        gtk_widget_show (self->enterprise_offline_area);
-                        break;
-        }
-        /*gtk_stack_set_visible_child_name (GTK_STACK (self->stack), mode_pages[mode]);*/
+        gtk_stack_set_visible_child_name (GTK_STACK (self->stack), mode_pages[mode]);
 
         /* The enterprise toggle state */
         active = (mode != UM_LOCAL);
@@ -1444,13 +1403,9 @@ on_enterprise_toggle (GtkToggleButton *toggle,
 }
 
 static void
-mode_init (UmAccountDialog *self,
-           GtkBuilder *builder)
+mode_init (UmAccountDialog *self)
 {
-        GtkWidget *widget;
-
-        widget = self->enterprise_button;
-        g_signal_connect (widget, "toggled", G_CALLBACK (on_enterprise_toggle), self);
+        g_signal_connect (self->enterprise_button, "toggled", G_CALLBACK (on_enterprise_toggle), self);
 }
 
 static void
@@ -1507,10 +1462,38 @@ um_account_dialog_init (UmAccountDialog *self)
         widget = GTK_WIDGET (gtk_builder_get_object (builder, "enterprise-offline-area"));
         self->enterprise_offline_area = widget;
 
-        local_init (self, builder);
+        self->local_username = (GtkWidget *) gtk_builder_get_object (builder, "local-username");
+        self->local_username_entry = (GtkWidget *) gtk_builder_get_object (builder, "local-username-entry");
+        self->local_name = (GtkWidget *) gtk_builder_get_object (builder, "local-name");
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-username-hint");
+        self->local_username_hint = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "account_type_standard");
+        self->account_type_standard = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-password-now-radio");
+        self->local_password_radio = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-password");
+        self->local_password = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-verify");
+        self->local_verify = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-strength-indicator");
+        self->local_strength_indicator = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-hint");
+        self->local_hint = widget;
+
+        widget = (GtkWidget *) gtk_builder_get_object (builder, "local-verify-hint");
+        self->local_verify_hint = widget;
+
+        local_init (self);
         enterprise_init (self, builder);
         join_init (self, builder);
-        mode_init (self, builder);
+        mode_init (self);
 
         g_object_unref (builder);
 }

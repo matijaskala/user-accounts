@@ -14,6 +14,7 @@ uidir=$(pkgdatadir)
 ui_DATA=				\
 	account-dialog.ui		\
 	account-fingerprint.ui		\
+	history-dialog.ui		\
 	password-dialog.ui		\
 	user-accounts-dialog.ui		\
 	$(NULL)

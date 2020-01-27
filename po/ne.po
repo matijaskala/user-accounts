@@ -6584,7 +6584,7 @@ msgstr "कृपया एप्लेट राम्रोसँग स्थ
 #: ../panels/user-accounts/um-user-panel.c:1312
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1350
@@ -6594,7 +6594,7 @@ msgstr "नयाँ प्रयोगकर्ता खाता सिर्
 #: ../panels/user-accounts/um-user-panel.c:1361 ../panels/user-accounts/um-user-panel.c:1674
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1371
@@ -6604,7 +6604,7 @@ msgstr "चयन गरेको प्रयोगकर्ता खाता
 #: ../panels/user-accounts/um-user-panel.c:1383 ../panels/user-accounts/um-user-panel.c:1679
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1588

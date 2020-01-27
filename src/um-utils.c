@@ -203,7 +203,6 @@ setup_tooltip_with_embedded_icon (GtkWidget   *widget,
                 g_object_set_data (G_OBJECT (widget), "tooltip-label", NULL);
         }
 
-        placeholder = NULL; // HACK to prevent crash
         if (!placeholder) {
                 gtk_widget_set_tooltip_text (widget, text);
                 return;
@@ -345,7 +344,7 @@ popup_menu_below_button (GtkMenu   *menu,
         GtkTextDirection direction;
         GtkAllocation allocation;
 
-        gtk_widget_get_child_requisition (GTK_WIDGET (menu), &menu_req);
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &menu_req);
 
         direction = gtk_widget_get_direction (button);
 
@@ -406,20 +405,25 @@ rounded_rectangle (cairo_t *cr,
 }
 
 void
-down_arrow (GtkStyle *style,
+down_arrow (GtkStyleContext *context,
             cairo_t         *cr,
             gint             x,
             gint             y,
             gint             width,
             gint             height)
 {
-        GdkColor fg_color = style->fg[0]; // FIXME
+        GtkStateFlags flags;
+        GdkRGBA fg_color;
         gdouble vertical_overshoot;
         gint diameter;
         gdouble radius;
         gdouble x_double, y_double;
         gdouble angle;
         gint line_width;
+
+        flags = gtk_style_context_get_state (context);
+
+        gtk_style_context_get_color (context, flags, &fg_color);
 
         line_width = 1;
         angle = G_PI / 2;
@@ -448,7 +452,7 @@ down_arrow (GtkStyle *style,
 
         cairo_set_line_width (cr, line_width);
 
-        gdk_cairo_set_source_color (cr, &fg_color);
+        gdk_cairo_set_source_rgba (cr, &fg_color);
 
         cairo_fill_preserve (cr);
         cairo_stroke (cr);
@@ -861,115 +865,8 @@ check_user_file (const char *filename,
         return TRUE;
 }
 
-static void
-gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
-                                const GdkPixbuf *pixbuf)
-{
-  gint width, height;
-  guchar *gdk_pixels, *cairo_pixels;
-  int gdk_rowstride, cairo_stride;
-  int n_channels;
-  int j;
-
-  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
-    return;
-
-  /* This function can't just copy any pixbuf to any surface, be
-   * sure to read the invariants here before calling it */
-
-  g_assert (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
-  g_assert (cairo_image_surface_get_format (surface) == CAIRO_FORMAT_RGB24 ||
-            cairo_image_surface_get_format (surface) == CAIRO_FORMAT_ARGB32);
-  g_assert (cairo_image_surface_get_width (surface) == gdk_pixbuf_get_width (pixbuf));
-  g_assert (cairo_image_surface_get_height (surface) == gdk_pixbuf_get_height (pixbuf));
-
-  cairo_surface_flush (surface);
-
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-  gdk_pixels = gdk_pixbuf_get_pixels (pixbuf);
-  gdk_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-  cairo_stride = cairo_image_surface_get_stride (surface);
-  cairo_pixels = cairo_image_surface_get_data (surface);
-
-  for (j = height; j; j--)
-    {
-      guchar *p = gdk_pixels;
-      guchar *q = cairo_pixels;
-
-      if (n_channels == 3)
-        {
-          guchar *end = p + 3 * width;
-
-          while (p < end)
-            {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-              q[0] = p[2];
-              q[1] = p[1];
-              q[2] = p[0];
-#else
-              q[1] = p[0];
-              q[2] = p[1];
-              q[3] = p[2];
-#endif
-              p += 3;
-              q += 4;
-            }
-        }
-      else
-        {
-          guchar *end = p + 4 * width;
-          guint t1,t2,t3;
-
-#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x80; d = ((t >> 8) + t) >> 8; } G_STMT_END
-
-          while (p < end)
-            {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-              MULT(q[0], p[2], p[3], t1);
-              MULT(q[1], p[1], p[3], t2);
-              MULT(q[2], p[0], p[3], t3);
-              q[3] = p[3];
-#else
-              q[0] = p[3];
-              MULT(q[1], p[0], p[3], t1);
-              MULT(q[2], p[1], p[3], t2);
-              MULT(q[3], p[2], p[3], t3);
-#endif
-
-              p += 4;
-              q += 4;
-            }
-
-#undef MULT
-        }
-
-      gdk_pixels += gdk_rowstride;
-      cairo_pixels += cairo_stride;
-    }
-
-  cairo_surface_mark_dirty (surface);
-}
-
-static cairo_surface_t *
-gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
-                                      int              scale,
-                                      GdkWindow       *for_window)
-{
-        cairo_surface_t* surface =
-        cairo_image_surface_create ((gdk_pixbuf_get_n_channels (pixbuf) == 3) ? CAIRO_FORMAT_RGB24 : CAIRO_FORMAT_ARGB32,
-                                              gdk_pixbuf_get_width (pixbuf),
-                                              gdk_pixbuf_get_height (pixbuf));
-        cairo_surface_set_device_scale (surface, scale, scale);
-
-        gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
-
-        return surface;
-}
-
-static cairo_surface_t *
-frame_surface (cairo_surface_t *source, gint scale)
+static GdkPixbuf *
+frame_pixbuf (GdkPixbuf *source, gint scale)
 {
         GdkPixbuf       *dest;
         cairo_t         *cr;
@@ -981,13 +878,14 @@ frame_surface (cairo_surface_t *source, gint scale)
 
         frame_width = 2 * scale;
 
-        w = cairo_image_surface_get_width (source) + frame_width * 2;
-        h = cairo_image_surface_get_height (source) + frame_width * 2;
+        w = gdk_pixbuf_get_width (source) + frame_width * 2;
+        h = gdk_pixbuf_get_height (source) + frame_width * 2;
         radius = w / 10;
 
         surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                               w, h);
         cr = cairo_create (surface);
+        cairo_surface_destroy (surface);
 
         /* set up image */
         cairo_rectangle (cr, 0, 0, w, h);
@@ -998,35 +896,36 @@ frame_surface (cairo_surface_t *source, gint scale)
         cairo_set_source_rgba (cr, 0.5, 0.5, 0.5, 0.3);
         cairo_fill_preserve (cr);
 
-        cairo_set_source_surface (cr, source, frame_width, frame_width);
+        gdk_cairo_set_source_pixbuf (cr, source, frame_width, frame_width);
         cairo_fill (cr);
 
-        cairo_surface_destroy (source);
+        dest = gdk_pixbuf_get_from_surface (surface, 0, 0, w, h);
+
         cairo_destroy (cr);
 
-        return surface;
+        return dest;
 }
 
-static cairo_surface_t *
-logged_in_pixbuf (cairo_surface_t *source, gint scale)
+static GdkPixbuf *
+logged_in_pixbuf (GdkPixbuf *pixbuf, gint scale)
 {
         cairo_format_t format;
         cairo_surface_t *surface;
         cairo_pattern_t *pattern;
         cairo_t *cr;
         gint width, height;
-        GdkColor color;
+        GdkRGBA color;
 
-        width = cairo_image_surface_get_width (source);
-        height = cairo_image_surface_get_height (source);
+        width = gdk_pixbuf_get_width (pixbuf);
+        height = gdk_pixbuf_get_height (pixbuf);
 
-        g_return_val_if_fail (width > 15 && height > 15, source);
+        g_return_val_if_fail (width > 15 && height > 15, pixbuf);
 
-        format = cairo_image_surface_get_format (source);
+        format = gdk_pixbuf_get_has_alpha (pixbuf) ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
         surface = cairo_image_surface_create (format, width, height);
         cr = cairo_create (surface);
 
-        cairo_set_source_surface (cr, source, 0, 0);
+        gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
         cairo_paint (cr);
 
         /* Draw pattern */
@@ -1043,26 +942,28 @@ logged_in_pixbuf (cairo_surface_t *source, gint scale)
         /* Draw border */
         cairo_set_line_width (cr, 0.9 * scale);
         cairo_arc (cr, width - 8.5 * scale, height - 8.5 * scale, 6 * scale, 0, 2 * G_PI);
-        gdk_color_parse ("#ffffff", &color);
-        gdk_cairo_set_source_color (cr, &color);
+        gdk_rgba_parse (&color, "#ffffff");
+        gdk_cairo_set_source_rgba (cr, &color);
         cairo_stroke (cr);
 
-        cairo_surface_destroy (source);
+        pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+
+        cairo_surface_finish (surface);
         cairo_destroy (cr);
 
-        return surface;
+        return pixbuf;
 }
 
 #define MAX_FILE_SIZE     65536
 
-GdkPixbuf *
+cairo_surface_t *
 render_user_icon (ActUser     *user,
                   UmIconStyle  style,
                   gint         icon_size,
                   gint         scale)
 {
         GdkPixbuf    *pixbuf;
-        cairo_surface_t    *framed;
+        GdkPixbuf    *framed;
         gboolean      res;
         GError       *error;
         const gchar  *icon_file;
@@ -1104,25 +1005,25 @@ render_user_icon (ActUser     *user,
 
  out:
 
+        if (pixbuf != NULL && (style & UM_ICON_STYLE_FRAME)) {
+                framed = frame_pixbuf (pixbuf, scale);
+                if (framed != NULL) {
+                        g_object_unref (pixbuf);
+                        pixbuf = framed;
+                }
+        }
+
+        if (pixbuf != NULL && (style & UM_ICON_STYLE_STATUS) && act_user_is_logged_in (user)) {
+                framed = logged_in_pixbuf (pixbuf, scale);
+                if (framed != NULL) {
+                        g_object_unref (pixbuf);
+                        pixbuf = framed;
+                }
+        }
+
         if (pixbuf != NULL) {
-                return pixbuf;
                 surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, NULL);
-        }
-
-        if (surface != NULL && (style & UM_ICON_STYLE_FRAME)) {
-                framed = frame_surface (surface, scale);
-                if (framed != NULL) {
-                        cairo_surface_destroy (surface);
-                        surface = framed;
-                }
-        }
-
-        if (surface != NULL && (style & UM_ICON_STYLE_STATUS) && act_user_is_logged_in (user)) {
-                framed = logged_in_pixbuf (surface, scale);
-                if (framed != NULL) {
-                        cairo_surface_destroy (surface);
-                        surface = framed;
-                }
+                g_object_unref (pixbuf);
         }
 
         return surface;

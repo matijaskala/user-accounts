@@ -6681,7 +6681,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1115
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "পৰিবৰ্তনসমূহ কৰিবলে,\n"
 "* আইকন প্ৰথমতে ক্লিক কৰক"
@@ -6694,7 +6694,7 @@ msgstr "এজন ব্যৱহাৰকাৰীৰ একাওন্ট স
 #: ../panels/user-accounts/um-user-panel.c:1453
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "এজন ব্যৱহাৰকাৰী সৃষ্টি কৰিবলে,\n"
 "* আইকন প্ৰথমতে ক্লিক কৰক"
@@ -6707,7 +6707,7 @@ msgstr "নিৰ্বাচিত ব্যৱহাৰকাৰী একা�
 #: ../panels/user-accounts/um-user-panel.c:1458
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "নিৰ্বাচিত ব্যৱহাৰকাৰী একাওন্ট মচিবলে,\n"
 "* আইকন প্ৰথমতে ক্লিক কৰক"

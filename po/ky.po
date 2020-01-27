@@ -4837,7 +4837,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:913
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:951
@@ -4848,7 +4848,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1273
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:971
@@ -4859,7 +4859,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1278
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1176

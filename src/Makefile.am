@@ -29,6 +29,8 @@ user_accounts_SOURCES =			\
 	um-account-type.c 		\
 	um-account-dialog.h		\
 	um-account-dialog.c		\
+	um-history-dialog.h		\
+	um-history-dialog.c		\
 	um-password-dialog.h		\
 	um-password-dialog.c		\
 	pw-utils.h			\

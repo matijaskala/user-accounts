@@ -6834,7 +6834,7 @@ msgstr "AccountService орнатылған және іске қосылғаны
 #: ../panels/user-accounts/um-user-panel.c:1334
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Өзгерістерді жасау үшін,\n"
 "алдымен * таңбашасына шертіңіз"
@@ -6847,7 +6847,7 @@ msgstr "Пайдаланушы тіркелгісін жасау"
 #: ../panels/user-accounts/um-user-panel.c:1677
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Пайдаланушы тіркелгісін жасау үшін,\n"
 "алдымен * таңбашасына шертіңіз"
@@ -6860,7 +6860,7 @@ msgstr "Таңдалған пайдаланушы тіркелгісін өші�
 #: ../panels/user-accounts/um-user-panel.c:1682
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "Таңдалған пайдаланушы тіркелгісін өшіру үшін,\n"
 "алдымен * таңбашасына шертіңіз"

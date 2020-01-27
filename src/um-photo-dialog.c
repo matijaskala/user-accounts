@@ -148,9 +148,9 @@ file_chooser_response (GtkDialog     *chooser,
 
 static char *
 expand_thumbnailing_script (const char *script,
-			    const int   size, 
-			    const char *inuri,
-			    const char *outfile)
+                            const int   size, 
+                            const char *inuri,
+                            const char *outfile)
 {
   GString *str;
   const char *p, *last;
@@ -168,41 +168,41 @@ expand_thumbnailing_script (const char *script,
 
       switch (*p) {
       case 'u':
-	quoted = g_shell_quote (inuri);
-	g_string_append (str, quoted);
-	g_free (quoted);
-	got_in = TRUE;
-	p++;
-	break;
+        quoted = g_shell_quote (inuri);
+        g_string_append (str, quoted);
+        g_free (quoted);
+        got_in = TRUE;
+        p++;
+        break;
       case 'i':
-	localfile = g_filename_from_uri (inuri, NULL, NULL);
-	if (localfile)
-	  {
-	    quoted = g_shell_quote (localfile);
-	    g_string_append (str, quoted);
-	    got_in = TRUE;
-	    g_free (quoted);
-	    g_free (localfile);
-	  }
-	p++;
-	break;
+        localfile = g_filename_from_uri (inuri, NULL, NULL);
+        if (localfile)
+          {
+            quoted = g_shell_quote (localfile);
+            g_string_append (str, quoted);
+            got_in = TRUE;
+            g_free (quoted);
+            g_free (localfile);
+          }
+        p++;
+        break;
       case 'o':
-	quoted = g_shell_quote (outfile);
-	g_string_append (str, quoted);
-	g_free (quoted);
-	p++;
-	break;
+        quoted = g_shell_quote (outfile);
+        g_string_append (str, quoted);
+        g_free (quoted);
+        p++;
+        break;
       case 's':
-	g_string_append_printf (str, "%d", size);
-	p++;
-	break;
+        g_string_append_printf (str, "%d", size);
+        p++;
+        break;
       case '%':
-	g_string_append_c (str, '%');
-	p++;
-	break;
+        g_string_append_c (str, '%');
+        p++;
+        break;
       case 0:
       default:
-	break;
+        break;
       }
       last = p;
     }
@@ -225,132 +225,132 @@ typedef struct {
 
 static GdkPixbuf *
 gnome_desktop_thumbnail_scale_down_pixbuf (GdkPixbuf *pixbuf,
-					   int dest_width,
-					   int dest_height)
+                                           int dest_width,
+                                           int dest_height)
 {
-	int source_width, source_height;
-	int s_x1, s_y1, s_x2, s_y2;
-	int s_xfrac, s_yfrac;
-	int dx, dx_frac, dy, dy_frac;
-	div_t ddx, ddy;
-	int x, y;
-	int r, g, b, a;
-	int n_pixels;
-	gboolean has_alpha;
-	guchar *dest, *src, *xsrc, *src_pixels;
-	GdkPixbuf *dest_pixbuf;
-	int pixel_stride;
-	int source_rowstride, dest_rowstride;
+        int source_width, source_height;
+        int s_x1, s_y1, s_x2, s_y2;
+        int s_xfrac, s_yfrac;
+        int dx, dx_frac, dy, dy_frac;
+        div_t ddx, ddy;
+        int x, y;
+        int r, g, b, a;
+        int n_pixels;
+        gboolean has_alpha;
+        guchar *dest, *src, *xsrc, *src_pixels;
+        GdkPixbuf *dest_pixbuf;
+        int pixel_stride;
+        int source_rowstride, dest_rowstride;
 
-	if (dest_width == 0 || dest_height == 0) {
-		return NULL;
-	}
-	
-	source_width = gdk_pixbuf_get_width (pixbuf);
-	source_height = gdk_pixbuf_get_height (pixbuf);
+        if (dest_width == 0 || dest_height == 0) {
+                return NULL;
+        }
+        
+        source_width = gdk_pixbuf_get_width (pixbuf);
+        source_height = gdk_pixbuf_get_height (pixbuf);
 
-	g_assert (source_width >= dest_width);
-	g_assert (source_height >= dest_height);
+        g_assert (source_width >= dest_width);
+        g_assert (source_height >= dest_height);
 
-	ddx = div (source_width, dest_width);
-	dx = ddx.quot;
-	dx_frac = ddx.rem;
-	
-	ddy = div (source_height, dest_height);
-	dy = ddy.quot;
-	dy_frac = ddy.rem;
+        ddx = div (source_width, dest_width);
+        dx = ddx.quot;
+        dx_frac = ddx.rem;
+        
+        ddy = div (source_height, dest_height);
+        dy = ddy.quot;
+        dy_frac = ddy.rem;
 
-	has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
-	source_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-	src_pixels = gdk_pixbuf_get_pixels (pixbuf);
+        has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
+        source_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+        src_pixels = gdk_pixbuf_get_pixels (pixbuf);
 
-	dest_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, has_alpha, 8,
-				      dest_width, dest_height);
-	dest = gdk_pixbuf_get_pixels (dest_pixbuf);
-	dest_rowstride = gdk_pixbuf_get_rowstride (dest_pixbuf);
+        dest_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, has_alpha, 8,
+                                      dest_width, dest_height);
+        dest = gdk_pixbuf_get_pixels (dest_pixbuf);
+        dest_rowstride = gdk_pixbuf_get_rowstride (dest_pixbuf);
 
-	pixel_stride = (has_alpha)?4:3;
-	
-	s_y1 = 0;
-	s_yfrac = -dest_height/2;
-	while (s_y1 < source_height) {
-		s_y2 = s_y1 + dy;
-		s_yfrac += dy_frac;
-		if (s_yfrac > 0) {
-			s_y2++;
-			s_yfrac -= dest_height;
-		}
+        pixel_stride = (has_alpha)?4:3;
+        
+        s_y1 = 0;
+        s_yfrac = -dest_height/2;
+        while (s_y1 < source_height) {
+                s_y2 = s_y1 + dy;
+                s_yfrac += dy_frac;
+                if (s_yfrac > 0) {
+                        s_y2++;
+                        s_yfrac -= dest_height;
+                }
 
-		s_x1 = 0;
-		s_xfrac = -dest_width/2;
-		while (s_x1 < source_width) {
-			s_x2 = s_x1 + dx;
-			s_xfrac += dx_frac;
-			if (s_xfrac > 0) {
-				s_x2++;
-				s_xfrac -= dest_width;
-			}
+                s_x1 = 0;
+                s_xfrac = -dest_width/2;
+                while (s_x1 < source_width) {
+                        s_x2 = s_x1 + dx;
+                        s_xfrac += dx_frac;
+                        if (s_xfrac > 0) {
+                                s_x2++;
+                                s_xfrac -= dest_width;
+                        }
 
-			/* Average block of [x1,x2[ x [y1,y2[ and store in dest */
-			r = g = b = a = 0;
-			n_pixels = 0;
+                        /* Average block of [x1,x2[ x [y1,y2[ and store in dest */
+                        r = g = b = a = 0;
+                        n_pixels = 0;
 
-			src = src_pixels + s_y1 * source_rowstride + s_x1 * pixel_stride;
-			for (y = s_y1; y < s_y2; y++) {
-				xsrc = src;
-				if (has_alpha) {
-					for (x = 0; x < s_x2-s_x1; x++) {
-						n_pixels++;
-						
-						r += xsrc[3] * xsrc[0];
-						g += xsrc[3] * xsrc[1];
-						b += xsrc[3] * xsrc[2];
-						a += xsrc[3];
-						xsrc += 4;
-					}
-				} else {
-					for (x = 0; x < s_x2-s_x1; x++) {
-						n_pixels++;
-						r += *xsrc++;
-						g += *xsrc++;
-						b += *xsrc++;
-					}
-				}
-				src += source_rowstride;
-			}
-			
-			if (has_alpha) {
-				if (a != 0) {
-					*dest++ = r / a;
-					*dest++ = g / a;
-					*dest++ = b / a;
-					*dest++ = a / n_pixels;
-				} else {
-					*dest++ = 0;
-					*dest++ = 0;
-					*dest++ = 0;
-					*dest++ = 0;
-				}
-			} else {
-				*dest++ = r / n_pixels;
-				*dest++ = g / n_pixels;
-				*dest++ = b / n_pixels;
-			}
-			
-			s_x1 = s_x2;
-		}
-		s_y1 = s_y2;
-		dest += dest_rowstride - dest_width * pixel_stride;
-	}
-	
-	return dest_pixbuf;
+                        src = src_pixels + s_y1 * source_rowstride + s_x1 * pixel_stride;
+                        for (y = s_y1; y < s_y2; y++) {
+                                xsrc = src;
+                                if (has_alpha) {
+                                        for (x = 0; x < s_x2-s_x1; x++) {
+                                                n_pixels++;
+                                                
+                                                r += xsrc[3] * xsrc[0];
+                                                g += xsrc[3] * xsrc[1];
+                                                b += xsrc[3] * xsrc[2];
+                                                a += xsrc[3];
+                                                xsrc += 4;
+                                        }
+                                } else {
+                                        for (x = 0; x < s_x2-s_x1; x++) {
+                                                n_pixels++;
+                                                r += *xsrc++;
+                                                g += *xsrc++;
+                                                b += *xsrc++;
+                                        }
+                                }
+                                src += source_rowstride;
+                        }
+                        
+                        if (has_alpha) {
+                                if (a != 0) {
+                                        *dest++ = r / a;
+                                        *dest++ = g / a;
+                                        *dest++ = b / a;
+                                        *dest++ = a / n_pixels;
+                                } else {
+                                        *dest++ = 0;
+                                        *dest++ = 0;
+                                        *dest++ = 0;
+                                        *dest++ = 0;
+                                }
+                        } else {
+                                *dest++ = r / n_pixels;
+                                *dest++ = g / n_pixels;
+                                *dest++ = b / n_pixels;
+                        }
+                        
+                        s_x1 = s_x2;
+                }
+                s_y1 = s_y2;
+                dest += dest_rowstride - dest_width * pixel_stride;
+        }
+        
+        return dest_pixbuf;
 }
 
 static void
 size_prepared_cb (GdkPixbufLoader *loader, 
-		  int              width,
-		  int              height,
-		  gpointer         data)
+                  int              width,
+                  int              height,
+                  gpointer         data)
 {
   SizePrepareContext *info = data;
   
@@ -401,7 +401,7 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
     char buffer[0x1000];
     gsize bytes_read;
     GdkPixbufLoader *loader;
-    GdkPixbuf *pixbuf;	
+    GdkPixbuf *pixbuf;  
     GdkPixbufAnimation *animation;
     GdkPixbufAnimationIter *iter;
     gboolean has_frame;
@@ -440,7 +440,7 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
     if (input_stream == NULL) {
         input_stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
         if (input_stream == NULL) {
-	    g_object_unref (file);
+            g_object_unref (file);
             return NULL;
         }
     }
@@ -449,7 +449,7 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
     if (1 <= width || 1 <= height) {
         info.width = width;
         info.height = height;
-	info.input_width = info.input_height = 0;
+        info.input_width = info.input_height = 0;
         info.preserve_aspect_ratio = preserve_aspect_ratio;        
         g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), &info);
     }
@@ -459,45 +459,45 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
     result = FALSE;
     while (!has_frame) {
 
-	bytes_read = g_input_stream_read (input_stream,
-					  buffer,
-					  sizeof (buffer),
-					  NULL,
-					  NULL);
-	if (bytes_read == -1) {
-	    break;
-	}
-	result = TRUE;
-	if (bytes_read == 0) {
-	    break;
-	}
+        bytes_read = g_input_stream_read (input_stream,
+                                          buffer,
+                                          sizeof (buffer),
+                                          NULL,
+                                          NULL);
+        if (bytes_read == -1) {
+            break;
+        }
+        result = TRUE;
+        if (bytes_read == 0) {
+            break;
+        }
 
-	if (!gdk_pixbuf_loader_write (loader,
-				      (unsigned char *)buffer,
-				      bytes_read,
-				      NULL)) {
-	    result = FALSE;
-	    break;
-	}
+        if (!gdk_pixbuf_loader_write (loader,
+                                      (unsigned char *)buffer,
+                                      bytes_read,
+                                      NULL)) {
+            result = FALSE;
+            break;
+        }
 
-	animation = gdk_pixbuf_loader_get_animation (loader);
-	if (animation) {
-		iter = gdk_pixbuf_animation_get_iter (animation, NULL);
-		if (!gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)) {
-			has_frame = TRUE;
-		}
-		g_object_unref (iter);
-	}
+        animation = gdk_pixbuf_loader_get_animation (loader);
+        if (animation) {
+                iter = gdk_pixbuf_animation_get_iter (animation, NULL);
+                if (!gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)) {
+                        has_frame = TRUE;
+                }
+                g_object_unref (iter);
+        }
     }
 
     gdk_pixbuf_loader_close (loader, NULL);
 
     if (!result) {
-	g_object_unref (G_OBJECT (loader));
-	g_input_stream_close (input_stream, NULL, NULL);
-	g_object_unref (input_stream);
-	g_object_unref (file);
-	return NULL;
+        g_object_unref (G_OBJECT (loader));
+        g_input_stream_close (input_stream, NULL, NULL);
+        g_object_unref (input_stream);
+        g_object_unref (file);
+        return NULL;
     }
 
     g_input_stream_close (input_stream, NULL, NULL);
@@ -506,11 +506,11 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
 
     pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
     if (pixbuf != NULL) {
-	g_object_ref (G_OBJECT (pixbuf));
-	g_object_set_data (G_OBJECT (pixbuf), "gnome-original-width",
-			   GINT_TO_POINTER (info.input_width));
-	g_object_set_data (G_OBJECT (pixbuf), "gnome-original-height",
-			   GINT_TO_POINTER (info.input_height));
+        g_object_ref (G_OBJECT (pixbuf));
+        g_object_set_data (G_OBJECT (pixbuf), "gnome-original-width",
+                           GINT_TO_POINTER (info.input_width));
+        g_object_set_data (G_OBJECT (pixbuf), "gnome-original-height",
+                           GINT_TO_POINTER (info.input_height));
     }
     g_object_unref (G_OBJECT (loader));
 
@@ -519,8 +519,8 @@ _gdk_pixbuf_new_from_uri_at_scale (const char *uri,
 
 GdkPixbuf *
 desktop_thumbnail_factory_generate_thumbnail (GHashTable              *scripts_hash,
-						    const char              *uri,
-						    const char              *mime_type)
+                                                    const char              *uri,
+                                                    const char              *mime_type)
 {
   GdkPixbuf *pixbuf, *scaled, *tmp_pixbuf;
   char *script, *expanded_script;
@@ -554,22 +554,22 @@ desktop_thumbnail_factory_generate_thumbnail (GHashTable              *scripts_h
       fd = g_file_open_tmp (".gnome_desktop_thumbnail.XXXXXX", &tmpname, NULL);
 
       if (fd != -1)
-	{
-	  close (fd);
+        {
+          close (fd);
 
-	  expanded_script = expand_thumbnailing_script (script, size, uri, tmpname);
-	  if (expanded_script != NULL &&
-	      g_spawn_command_line_sync (expanded_script,
-					 NULL, NULL, &exit_status, NULL) &&
-	      exit_status == 0)
-	    {
-	      pixbuf = gdk_pixbuf_new_from_file (tmpname, NULL);
-	    }
+          expanded_script = expand_thumbnailing_script (script, size, uri, tmpname);
+          if (expanded_script != NULL &&
+              g_spawn_command_line_sync (expanded_script,
+                                         NULL, NULL, &exit_status, NULL) &&
+              exit_status == 0)
+            {
+              pixbuf = gdk_pixbuf_new_from_file (tmpname, NULL);
+            }
 
-	  g_free (expanded_script);
-	  g_unlink (tmpname);
-	  g_free (tmpname);
-	}
+          g_free (expanded_script);
+          g_unlink (tmpname);
+          g_free (tmpname);
+        }
 
       g_free (script);
     }
@@ -607,17 +607,17 @@ desktop_thumbnail_factory_generate_thumbnail (GHashTable              *scripts_h
       scale = (double)size / MAX (width, height);
 
       scaled = gnome_desktop_thumbnail_scale_down_pixbuf (pixbuf,
-						  floor (width * scale + 0.5),
-						  floor (height * scale + 0.5));
+                                                  floor (width * scale + 0.5),
+                                                  floor (height * scale + 0.5));
 
       orig_width = gdk_pixbuf_get_option (pixbuf, "tEXt::Thumb::Image::Width");
       orig_height = gdk_pixbuf_get_option (pixbuf, "tEXt::Thumb::Image::Height");
 
       if (orig_width != NULL) {
-	      gdk_pixbuf_set_option (scaled, "tEXt::Thumb::Image::Width", orig_width);
+              gdk_pixbuf_set_option (scaled, "tEXt::Thumb::Image::Width", orig_width);
       }
       if (orig_height != NULL) {
-	      gdk_pixbuf_set_option (scaled, "tEXt::Thumb::Image::Height", orig_height);
+              gdk_pixbuf_set_option (scaled, "tEXt::Thumb::Image::Height", orig_height);
       }
       
       g_object_unref (pixbuf);
@@ -625,12 +625,12 @@ desktop_thumbnail_factory_generate_thumbnail (GHashTable              *scripts_h
     }
   
   if (original_width > 0) {
-	  g_snprintf (dimension, sizeof (dimension), "%i", original_width);
-	  gdk_pixbuf_set_option (pixbuf, "tEXt::Thumb::Image::Width", dimension);
+          g_snprintf (dimension, sizeof (dimension), "%i", original_width);
+          gdk_pixbuf_set_option (pixbuf, "tEXt::Thumb::Image::Width", dimension);
   }
   if (original_height > 0) {
-	  g_snprintf (dimension, sizeof (dimension), "%i", original_height);
-	  gdk_pixbuf_set_option (pixbuf, "tEXt::Thumb::Image::Height", dimension);
+          g_snprintf (dimension, sizeof (dimension), "%i", original_height);
+          gdk_pixbuf_set_option (pixbuf, "tEXt::Thumb::Image::Height", dimension);
   }
 
   return pixbuf;
@@ -668,8 +668,8 @@ update_preview (GtkFileChooser               *chooser,
 
                 if (mime_type) {
                         pixbuf = desktop_thumbnail_factory_generate_thumbnail (scripts_hash,
-                                                                               uri,
-                                                                               mime_type);
+                                                                                     uri,
+                                                                                     mime_type);
                 }
 
                 gtk_dialog_set_response_sensitive (GTK_DIALOG (chooser),
@@ -1025,17 +1025,15 @@ popup_button_draw (GtkWidget      *widget,
                    cairo_t        *cr,
                    UmPhotoDialog  *um)
 {
-        if ((gtk_widget_get_state (gtk_bin_get_child (GTK_BIN (widget))) != GTK_STATE_PRELIGHT) &&
+        if (!(gtk_widget_get_state_flags (gtk_bin_get_child (GTK_BIN (widget))) & GTK_STATE_FLAG_PRELIGHT) &&
             !gtk_widget_is_focus (widget)) {
                 return;
         }
 
-        GtkAllocation allocation;
-        gtk_widget_get_allocation (widget, &allocation);
-        down_arrow (gtk_widget_get_style (widget),
+        down_arrow (gtk_widget_get_style_context (widget),
                     cr,
-                    allocation.width - 12,
-                    allocation.height - 12,
+                    gtk_widget_get_allocated_width (widget) - 12,
+                    gtk_widget_get_allocated_height (widget) - 12,
                     12, 12);
 }
 

@@ -6929,7 +6929,7 @@ msgstr "कृपया सुनिश्चित करें कि खा�
 #: ../panels/user-accounts/um-user-panel.c:1114
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "बदलाब लाने के लिए,\n"
 "क्लिक करें * चिह्न पर पहले"
@@ -6942,7 +6942,7 @@ msgstr "उपयोगकर्ता खाता बनाएँ"
 #: ../panels/user-accounts/um-user-panel.c:1475
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "उपयोगकर्ता खाता बनाने के लिए,\n"
 "क्लिक करें * चिह्न पर पहले"
@@ -6955,7 +6955,7 @@ msgstr "चयनित उपयोगकर्ता खाता को ह�
 #: ../panels/user-accounts/um-user-panel.c:1480
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "चयनित उपयोगकर्ता खाता को हटाने के लिए,\n"
 "क्लिक करें * चिह्न पर पहले"

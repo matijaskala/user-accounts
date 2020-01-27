@@ -347,8 +347,8 @@ update_cursor (CcCropArea *area,
         case BOTTOM_RIGHT:
                 cursor_type = GDK_BOTTOM_RIGHT_CORNER;
                 break;
-        default:
-                g_assert_not_reached ();
+	default:
+		g_assert_not_reached ();
         }
 
         if (cursor_type != area->priv->current_cursor) {
@@ -715,7 +715,7 @@ cc_crop_area_class_init (CcCropAreaClass *klass)
         GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
         object_class->finalize = cc_crop_area_finalize;
-        //widget_class->draw = cc_crop_area_draw;
+        widget_class->draw = cc_crop_area_draw;
         widget_class->button_press_event = cc_crop_area_button_press_event;
         widget_class->button_release_event = cc_crop_area_button_release_event;
         widget_class->motion_notify_event = cc_crop_area_motion_notify_event;

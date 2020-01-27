@@ -6814,7 +6814,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1110
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "மாற்றங்கள் செய்ய \n"
 "முதலில் * சின்னத்தை சொடுக்குக"
@@ -6827,7 +6827,7 @@ msgstr "ஒரு பயனர் கணக்கை உருவாக்கு
 #: ../panels/user-accounts/um-user-panel.c:1471
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "புதிய பயனர் கணக்கை உருவாக்க,\n"
 "முதலில் * சின்னத்தை சொடுக்குக"
@@ -6840,7 +6840,7 @@ msgstr "தேர்ந்தெடுத்த பயனர் கணக்க�
 #: ../panels/user-accounts/um-user-panel.c:1476
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "தேர்ந்தெடுத்த பயனர் கணக்கை நீக்க,\n"
 "முதலில் * சின்னத்தை சொடுக்குக"

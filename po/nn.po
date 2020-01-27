@@ -4589,7 +4589,7 @@ msgstr "Kontroller at kontotenesta er installert og slått på."
 #: ../panels/user-accounts/um-user-panel.c:902
 msgid ""
 "To make changes,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 "For å gjera endringar,\n"
 "trykk på *-ikonet først"
@@ -4602,7 +4602,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1241
 msgid ""
 "To create a user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:960
@@ -4613,7 +4613,7 @@ msgstr ""
 #: ../panels/user-accounts/um-user-panel.c:1246
 msgid ""
 "To delete the selected user account,\n"
-"click the unlock button first"
+"click the * icon first"
 msgstr ""
 
 #: ../panels/user-accounts/um-user-panel.c:1149
@@ -5199,7 +5199,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "To create a user,\n"
-#~ "click the unlock button first"
+#~ "click the * icon first"
 #~ msgstr ""
 #~ "For å laga brukar,\n"
 #~ "trykk på *-ikonet først"
@@ -5209,7 +5209,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "To delete the selected user,\n"
-#~ "click the unlock button first"
+#~ "click the * icon first"
 #~ msgstr ""
 #~ "For å sletta den valde brukaren,\n"
 #~ "trykk på *-ikonet først"
