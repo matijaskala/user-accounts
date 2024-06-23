@@ -22,8 +22,6 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include "um-editable-button.h"
-
 #include "um-fingerprint-dialog.h"
 
 #include "fingerprint-strings.h"

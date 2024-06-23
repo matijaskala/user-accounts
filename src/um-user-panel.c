@@ -40,8 +40,6 @@
 #include <cheese-gtk.h>
 #endif
 
-#include "um-editable-button.h"
-#include "um-editable-combo.h"
 #include "um-user-image.h"
 #include "um-cell-renderer-user-image.h"
 

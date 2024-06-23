@@ -62,12 +62,6 @@ user_accounts_LDADD = 			\
 	-lm				
 
 if BUILD_CHEESE
-#user_accounts_SOURCES +=		\
-#	um-editable-button.h		\
-#	um-editable-button.c		\
-#	um-editable-combo.h		\
-#	um-editable-combo.c		
-#
 user_accounts_LDADD += $(CHEESE_LIBS)
 endif
 
